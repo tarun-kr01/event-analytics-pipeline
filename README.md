@@ -21,6 +21,7 @@ The system demonstrates **real-world backend patterns** including event queues, 
 # Architecture
 
 The pipeline follows a typical **event-driven system design**.
+```mermaid
 flowchart TD
 
 A[Event Generator] --> B[Ingestion API<br>FastAPI]
@@ -45,6 +46,7 @@ end
 
 B --> J
 F --> J
+```
 
 ### Data Flow
 
