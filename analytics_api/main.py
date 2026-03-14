@@ -4,6 +4,7 @@ import redis
 import json
 import time
 import logging
+import redis
 from fastapi import Request
 
 app = FastAPI()
@@ -108,3 +109,28 @@ def events_by_type():
     cache.setex("events_by_type", CACHE_TTL, json.dumps(result))
 
     return result
+
+    @app.get("/system/status")
+def system_status():
+
+    status = {}
+
+    try:
+        cursor.execute("SELECT 1")
+        status["postgres"] = "ok"
+    except Exception as e:
+        status["postgres"] = str(e)
+
+    try:
+        cache.ping()
+        status["redis_cache"] = "ok"
+    except Exception as e:
+        status["redis_cache"] = str(e)
+
+    try:
+        queue = redis.Redis(host="localhost", port=6379, db=0)
+        status["queue_length"] = queue.llen("event_queue")
+    except Exception as e:
+        status["queue_length"] = str(e)
+
+    return status
