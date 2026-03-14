@@ -57,3 +57,6 @@ htmlcov/
 # Docker volumes (optional)
 data/
 postgres_data/
+
+.gemini/
+GEMINI.md
