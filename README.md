@@ -21,31 +21,30 @@ The system demonstrates **real-world backend patterns** including event queues, 
 # Architecture
 
 The pipeline follows a typical **event-driven system design**.
+flowchart TD
 
-```id="d9u6xv"
-Event Generator
-      │
-      ▼
-Ingestion API (FastAPI)
-      │
-      ▼
-Redis Queue
-      │
-      ▼
-Worker Consumer
-      │
-      ▼
-PostgreSQL (JSONB Event Store)
-      │
-      ▼
-Analytics API
-      │
-      ▼
-Redis Cache
-      │
-      ▼
-Client Metrics Queries
-```
+A[Event Generator] --> B[Ingestion API<br>FastAPI]
+
+B --> C[Redis Queue<br>DB 0]
+
+C --> D[Worker Consumer<br>Async Processor]
+
+D --> E[(PostgreSQL<br>JSONB Event Store)]
+
+E --> F[Analytics API<br>FastAPI]
+
+F --> G[Redis Cache<br>DB 1]
+
+G --> H[Client Metrics Requests]
+
+F --> I[System Status Endpoint]
+
+subgraph Observability
+J[Metrics Logging Middleware]
+end
+
+B --> J
+F --> J
 
 ### Data Flow
 
